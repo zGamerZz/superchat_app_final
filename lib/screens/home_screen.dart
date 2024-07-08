@@ -2,6 +2,7 @@ import 'package:chatter/pages/calls_page.dart';
 import 'package:chatter/pages/contacts_page.dart';
 import 'package:chatter/pages/messages_page.dart';
 import 'package:chatter/pages/notification_page.dart';
+import 'package:chatter/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -9,6 +10,7 @@ class HomeScreen extends StatelessWidget {
   HomeScreen({Key? key}) : super(key: key);
 
   final ValueNotifier<int> pageIndex = ValueNotifier(0);
+  final ValueNotifier<String> title = ValueNotifier('Messages');
 
   final pages = const [
     MessagesPage(),
@@ -17,24 +19,65 @@ class HomeScreen extends StatelessWidget {
     ContactsPage(),
   ];
 
+  final pageTitels = const ['Messages', 'Notifications', 'Calls', 'Contacts'];
+
+  void _onNavigationItemSelected(index) {
+    title.value = pageTitels[index];
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: pages[pageIndex.value],
-      bottomNavigationBar: _BottomNavigationBar(
-        onItemSelceted: (index) {
-          print(index);
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        title: ValueListenableBuilder(
+          valueListenable: title,
+          builder: (BuildContext context, String value, _) {
+            return Center(
+              child: Text(
+                value,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+            );
+          },
+        ),
+      ),
+      body: ValueListenableBuilder(
+        valueListenable: pageIndex,
+        builder: (BuildContext context, int value, _) {
+          return pages[value];
         },
+      ),
+      bottomNavigationBar: _BottomNavigationBar(
+        onItemSelceted: _onNavigationItemSelected,
       ),
     );
   }
 }
 
-class _BottomNavigationBar extends StatelessWidget {
+class _BottomNavigationBar extends StatefulWidget {
   const _BottomNavigationBar({Key? key, required this.onItemSelceted})
       : super(key: key);
 
   final ValueChanged<int> onItemSelceted;
+
+  @override
+  State<_BottomNavigationBar> createState() => _BottomNavigationBarState();
+}
+
+class _BottomNavigationBarState extends State<_BottomNavigationBar> {
+  var selectedIndex = 0;
+
+  void handleItemSelected(int index) {
+    setState(() {
+      selectedIndex = index;
+    });
+    widget.onItemSelceted(index);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,25 +91,29 @@ class _BottomNavigationBar extends StatelessWidget {
             index: 0,
             lable: 'Messages',
             icon: CupertinoIcons.bubble_left_bubble_right_fill,
-            onTap: onItemSelceted,
+            isSelected: (selectedIndex == 0),
+            onTap: handleItemSelected,
           ),
           _NavigationBarItem(
             index: 1,
             lable: 'Notifications',
             icon: CupertinoIcons.bell_solid,
-            onTap: onItemSelceted,
+            isSelected: (selectedIndex == 1),
+            onTap: handleItemSelected,
           ),
           _NavigationBarItem(
             index: 2,
             lable: 'Calls',
             icon: CupertinoIcons.phone_fill,
-            onTap: onItemSelceted,
+            isSelected: (selectedIndex == 2),
+            onTap: handleItemSelected,
           ),
           _NavigationBarItem(
             index: 3,
             lable: 'Contacts',
             icon: CupertinoIcons.person_2_fill,
-            onTap: onItemSelceted,
+            isSelected: (selectedIndex == 3),
+            onTap: handleItemSelected,
           ),
         ],
       ),
@@ -80,17 +127,20 @@ class _NavigationBarItem extends StatelessWidget {
     required this.index,
     required this.lable,
     required this.icon,
+    this.isSelected = false,
     required this.onTap,
   }) : super(key: key);
 
   final int index;
   final String lable;
   final IconData icon;
+  final bool isSelected;
   final ValueChanged<int> onTap;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: () {
         onTap(index);
       },
@@ -102,9 +152,19 @@ class _NavigationBarItem extends StatelessWidget {
             Icon(
               icon,
               size: 20,
+              color: isSelected ? AppColors.secondary : null,
             ),
             const SizedBox(height: 8),
-            Text(lable, style: const TextStyle(fontSize: 11)),
+            Text(
+              lable,
+              style: isSelected
+                  ? const TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.secondary,
+                    )
+                  : const TextStyle(fontSize: 11),
+            ),
           ],
         ),
       ),
