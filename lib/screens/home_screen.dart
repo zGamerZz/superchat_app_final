@@ -2,6 +2,7 @@ import 'package:chatter/pages/calls_page.dart';
 import 'package:chatter/pages/contacts_page.dart';
 import 'package:chatter/pages/messages_page.dart';
 import 'package:chatter/pages/notification_page.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -38,19 +39,19 @@ class BottomNavigationBar extends StatelessWidget {
         children: [
           _NavigationBarItem(
             lable: 'Messages',
-            icon: Icons.message,
+            icon: CupertinoIcons.bubble_left_bubble_right_fill,
           ),
           _NavigationBarItem(
             lable: 'Notifications',
-            icon: Icons.notifications,
+            icon: CupertinoIcons.bell_solid,
           ),
           _NavigationBarItem(
             lable: 'Calls',
-            icon: Icons.call,
+            icon: CupertinoIcons.phone_fill,
           ),
           _NavigationBarItem(
             lable: 'Contacts',
-            icon: Icons.contacts,
+            icon: CupertinoIcons.person_2_fill,
           ),
         ],
       ),
@@ -70,9 +71,19 @@ class _NavigationBarItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [Icon(icon), Text(lable)],
+    return SizedBox(
+      height: 70,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            icon,
+            size: 20,
+          ),
+          const SizedBox(height: 8),
+          Text(lable, style: const TextStyle(fontSize: 11)),
+        ],
+      ),
     );
   }
 }
