@@ -1,8 +1,11 @@
+import 'package:chatter/helpers.dart';
 import 'package:chatter/pages/calls_page.dart';
 import 'package:chatter/pages/contacts_page.dart';
 import 'package:chatter/pages/messages_page.dart';
 import 'package:chatter/pages/notification_page.dart';
 import 'package:chatter/theme.dart';
+import 'package:chatter/widgets/avatar.dart';
+import 'package:chatter/widgets/widgets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -45,6 +48,20 @@ class HomeScreen extends StatelessWidget {
             );
           },
         ),
+        leading: Center(
+          child: IconBackground(
+            icon: Icons.search,
+            onTap: () {
+              print('TODO search');
+            },
+          ),
+        ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 24.0),
+            child: Avatar.small(url: Helpers.randomPictureUrl()),
+          )
+        ],
       ),
       body: ValueListenableBuilder(
         valueListenable: pageIndex,

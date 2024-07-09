@@ -10,3 +10,12 @@ class MessagesPage extends StatelessWidget {
     );
   }
 }
+
+class _Stories extends StatelessWidget {
+  const _Stories({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
