@@ -1,6 +1,5 @@
 import 'package:chatter/app.dart';
 import 'package:chatter/screens/screens.dart';
-// import 'package:chatter/screens/select_user_screen.dart';
 import 'package:chatter/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:stream_chat_flutter_core/stream_chat_flutter_core.dart';
@@ -31,16 +30,9 @@ class MyApp extends StatelessWidget {
       themeMode: ThemeMode.dark,
       title: 'Chatter',
       builder: (context, child) {
-        return StreamChatCore(
-          client: client,
-          child: ChannelsBloc(
-            child: UsersBloc(
-              child: child!,
-            ),
-          ),
-        );
+        return StreamChatCore(client: client, child: child!);
       },
-      home: HomeScreen(),
+      home: SelectUserScreen(),
     );
   }
 }
